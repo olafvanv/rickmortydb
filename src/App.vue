@@ -26,10 +26,10 @@ export default {
   color: #2c3e50;
 }
 .container {
-  width: 100%;
+  width: 95%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 2.5% 20px;
 }
 h1{
   font-size:250%;

@@ -3,13 +3,21 @@
     <div class="page-title">
       <h1>Episodes</h1>
     </div>
-    <div class="episode-list">
-      <ul>
-        <li v-for="episode in episodes" v-bind:key="episode.id">
-          {{episode.episode}}: {{episode.name}}
-        </li>
-      </ul>
-    </div>
+    <ma class="episode-list">
+
+      <md-table v-for="(value, key) in seasons" :key="key" v-model="seasons[key]" md-card>
+        <md-table-toolbar>
+          <h1 class="md-title">{{key}}</h1>
+        </md-table-toolbar>
+
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="Episode" md-sort-by="episode">{{item.episode}}</md-table-cell>
+          <md-table-cell md-label="Title" md-sort-by="name">{{item.name}}</md-table-cell>
+          <md-table-cell md-label="Air Date" md-sort-by="air_date">{{item.air_date}}</md-table-cell>
+        </md-table-row>
+      </md-table>
+
+    </ma>
   </div>
 </template>
 
@@ -20,7 +28,12 @@ export default {
   name: "Episodes",
   data: function() {
     return {
-      episodes: []
+      episodes: [],
+      seasons: {
+        'Season 1': [],
+        'Season 2': [],
+        'Season 3': []
+      }
     };
   },
   beforeMount: function() {
@@ -38,22 +51,37 @@ export default {
         if(response.info.next){
           self.getEpisodes(response.info.next);
         }else{
-          console.log(self.episodes);
+          self.sortBySeason(self.episodes);
         }
 
         return;
       });
     },
-    getCharacters: function(characters) {
-      characters.map(function(character) {});
+    sortBySeason: function(episodes){
+      var self = this;
+
+      episodes.map(episode => {
+        let es = episode.episode;
+        
+        switch(true){
+          case (es.indexOf('S01') !== -1) :
+            self.seasons['Season 1'].push(episode);
+            break;
+          case (es.indexOf('S02') !== -1) :
+            self.seasons['Season 2'].push(episode);
+            break;
+          case (es.indexOf('S03') !== -1) :
+            self.seasons['Season 3'].push(episode);
+            break;
+        }
+      });
     }
   }
 };
 </script>
 
 <style scoped>
-.episode-list > ul {
-  list-style: none;
-  text-align: left;
+.episode-list .md-card {
+  margin-bottom:15px;
 }
 </style>
